@@ -2,6 +2,7 @@
 
 namespace ElasticsearchAsyncEnumerable
 {
+    
     public class MyDocument
     {
         public Guid Id { get; set; }
