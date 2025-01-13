@@ -10,7 +10,6 @@ namespace ElasticSearchAsyncEnumerable.Tests
     public class ElasticsearchFixture : IAsyncLifetime
     {
         private readonly ElasticsearchContainer _elasticsearchContainer = new ElasticsearchBuilder()
-            //.WithImage("elasticsearch:8.16.1")
             .WithImage("docker.elastic.co/elasticsearch/elasticsearch:8.17.0")
             .Build();
 
