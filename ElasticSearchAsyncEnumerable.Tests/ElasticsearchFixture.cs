@@ -16,7 +16,6 @@ namespace ElasticSearchAsyncEnumerable.Tests
         public ElasticsearchClient GetClient()
         {
             // Create client just for fixture
-            var ddd = this.GetConnectionString();
             var clientSettings = new ElasticsearchClientSettings(new Uri(this.GetConnectionString())).DisableDirectStreaming();
             clientSettings.ServerCertificateValidationCallback(CertificateValidations.AllowAll);
 
