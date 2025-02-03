@@ -69,6 +69,8 @@ namespace WebApplication.Controllers
                 var documentJson = JsonSerializer.SerializeToUtf8Bytes(document, _jsonSerializerOptions);
                 await this.HttpContext.Response.Body.WriteAsync(documentJson, cancellationToken);
                 await this.HttpContext.Response.Body.WriteAsync(newLineBytes, cancellationToken);
+                // Just to simulate calculation during data retrive phase
+                await Task.Delay(1);
             }
 
             await this.HttpContext.Response.Body.FlushAsync();
