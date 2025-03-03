@@ -9,7 +9,7 @@ namespace ElasticSearchAsyncEnumerable.Tests
 {
     public class ElasticsearchMillionsRecordFixture : ElasticsearchFixture
     {
-        public override async Task InitializeAsync()
+        public override async ValueTask InitializeAsync()
         {
             await base.InitializeAsync();
 

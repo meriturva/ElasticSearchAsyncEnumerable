@@ -10,7 +10,7 @@ namespace ElasticSearchAsyncEnumerable.Tests
     public class ElasticsearchFixture : IAsyncLifetime
     {
         private readonly ElasticsearchContainer _elasticsearchContainer = new ElasticsearchBuilder()
-            .WithImage("docker.elastic.co/elasticsearch/elasticsearch:8.17.0")
+            .WithImage("docker.elastic.co/elasticsearch/elasticsearch:8.17.2")
             .Build();
 
         public ElasticsearchClient GetClient()
@@ -27,12 +27,12 @@ namespace ElasticSearchAsyncEnumerable.Tests
             return _elasticsearchContainer.GetConnectionString();
         }
 
-        public virtual async Task InitializeAsync()
+        public virtual async ValueTask InitializeAsync()
         {
             await _elasticsearchContainer.StartAsync();
         }
 
-        public virtual async Task DisposeAsync()
+        public virtual async ValueTask DisposeAsync()
         {
             await _elasticsearchContainer.DisposeAsync();
         }

@@ -6,13 +6,17 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Elastic.Transport;
 using ElasticsearchAsyncEnumerable;
+using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace WebApplication.Tests
 {
     public class CustomWebApplicationFactory : WebApplicationFactory<Startup>, IAsyncLifetime
     {
         private readonly ElasticsearchContainer Testcontainer = new ElasticsearchBuilder()
-           .WithImage("docker.elastic.co/elasticsearch/elasticsearch:8.17.0")
+           .WithImage("docker.elastic.co/elasticsearch/elasticsearch:8.17.2")
            .Build();
 
         public ElasticsearchClient GetClient()
@@ -24,7 +28,7 @@ namespace WebApplication.Tests
             return new ElasticsearchClient(clientSettings);
         }
 
-        public async Task InitializeAsync()
+        public async ValueTask InitializeAsync()
         {
             await Testcontainer.StartAsync();
 
@@ -73,7 +77,7 @@ namespace WebApplication.Tests
             });
         }
 
-        async Task IAsyncLifetime.DisposeAsync()
+        public override async ValueTask DisposeAsync()
         {
             await Testcontainer.DisposeAsync();
         }
