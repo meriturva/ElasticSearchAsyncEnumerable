@@ -27,7 +27,8 @@ namespace WebApplication
             services.AddSingleton((_) =>
             {
                 var esConnectionString = _configuration.GetValue<string>("ElasticSearchConnectionString")!;
-                var clientSettings = new ElasticsearchClientSettings(new Uri(esConnectionString)).DisableDirectStreaming();
+                var clientSettings = new ElasticsearchClientSettings(new Uri(esConnectionString));
+                clientSettings.EnableDebugMode();
                 clientSettings.ServerCertificateValidationCallback(CertificateValidations.AllowAll);
 
                 return new ElasticsearchClient(clientSettings);
