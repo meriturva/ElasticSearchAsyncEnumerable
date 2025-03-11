@@ -1,4 +1,4 @@
-Sample project that illustrate concepts on articles:
+Sample project that illustrates concepts on articles:
 
 * Optimizing Elasticsearch pagination with IAsyncEnumerable https://medium.com/we-code/optimizing-elasticsearch-pagination-with-iasyncenumerable-d5dedbcf3cec
 * NDJson and IAsyncEnumerable: https://medium.com/we-code/ndjson-and-iasyncenumerable-ba2dd6be94e6
