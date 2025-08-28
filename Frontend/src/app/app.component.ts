@@ -27,6 +27,10 @@ export class AppComponent {
     });
   }
 
+  onFillData(): void {
+    this._httpClient.post("/stream", null).subscribe();
+  }
+
   private streamWithHttpClient(): Observable<MyRecord> {
     return new Observable<MyRecord>(observer => {
       this._httpClient.get("/stream", { responseType: 'text' }).subscribe(response => {

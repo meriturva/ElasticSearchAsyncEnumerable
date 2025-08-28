@@ -16,7 +16,7 @@ namespace WebApplication.Tests
     public class CustomWebApplicationFactory : WebApplicationFactory<Startup>, IAsyncLifetime
     {
         private readonly ElasticsearchContainer Testcontainer = new ElasticsearchBuilder()
-           .WithImage("docker.elastic.co/elasticsearch/elasticsearch:8.17.2")
+           .WithImage("docker.elastic.co/elasticsearch/elasticsearch:9.1.3")
            .Build();
 
         public ElasticsearchClient GetClient()

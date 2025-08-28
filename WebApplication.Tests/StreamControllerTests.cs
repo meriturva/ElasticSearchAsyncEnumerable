@@ -1,5 +1,5 @@
 ﻿using ElasticsearchAsyncEnumerable;
-using FluentAssertions;
+using AwesomeAssertions;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -23,7 +23,7 @@ namespace WebApplication.Tests
         public async Task TestStream()
         {
             // Act
-            var response = await _client.GetAsync("stream");
+            var response = await _client.GetAsync("stream", TestContext.Current.CancellationToken);
 
             // Assert
             response.EnsureSuccessStatusCode();
