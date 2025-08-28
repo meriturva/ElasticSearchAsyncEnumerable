@@ -1,6 +1,4 @@
-﻿using Elastic.Clients.Elasticsearch;
-using Elastic.Transport;
-using ElasticsearchAsyncEnumerable;
+﻿using ElasticsearchAsyncEnumerable;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -25,7 +23,7 @@ namespace ElasticSearchAsyncEnumerable.Tests
             var client = _fixture.GetClient();
 
             // Act
-            var response = await client.PingAsync();
+            var response = await client.PingAsync(TestContext.Current.CancellationToken);
 
             // Arrange
             Assert.True(response.IsValidResponse);
@@ -36,7 +34,7 @@ namespace ElasticSearchAsyncEnumerable.Tests
         public async Task PaginedResult()
         {
             // Act
-            var documents = await _myIndexRepository.GetDocumentsAsync();
+            var documents = await _myIndexRepository.GetDocumentsAsync(TestContext.Current.CancellationToken);
 
             // Arrange
             Assert.True(documents.Count() == 1_000_000);
@@ -48,7 +46,7 @@ namespace ElasticSearchAsyncEnumerable.Tests
             // Act
             var count = 0;
 
-            await foreach (var document in _myIndexRepository.GetDocumentsAsyncEnumerableAsync())
+            await foreach (var document in _myIndexRepository.GetDocumentsAsyncEnumerableAsync(TestContext.Current.CancellationToken))
             {
                 count++;
             }

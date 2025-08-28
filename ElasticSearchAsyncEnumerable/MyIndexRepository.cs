@@ -32,10 +32,10 @@ namespace ElasticsearchAsyncEnumerable
 
             while (true)
             {
-                var searchResponse = await _client.SearchAsync<MyDocument>(sd => sd.Index(_indexName)
+                var searchResponse = await _client.SearchAsync<MyDocument>(sd => sd.Indices(_indexName)
                 .Size(_maxResult)
                 .TrackTotalHits(new TrackHits(false))
-                .Pit(new PointInTimeReferenceDescriptor(lastPitId))
+                .Pit(p => p.Id(lastPitId))
                 .SearchAfter(searchAfter)
                 .Sort(sd => sd.Field(document => document.Id)), cancellationToken);
 
