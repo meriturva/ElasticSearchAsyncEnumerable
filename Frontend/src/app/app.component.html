@@ -1,6 +1,7 @@
 <button (click)="onFillData()">Fill example data</button><br>
 <button (click)="onStartHttpClient()">Start using httpClient</button><br>
 <button (click)="onStartStream()">Start using stream</button><br>
+<button (click)="onStartWithHttpClientEvents()">Start using httpClient events</button><br>
 
 @for(item of data(); track item.Id){
   {{ item.Title }} -
