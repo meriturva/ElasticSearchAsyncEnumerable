@@ -2,6 +2,11 @@
 <button (click)="onStartHttpClient()">Start using httpClient</button><br>
 <button (click)="onStartStream()">Start using stream</button><br>
 <button (click)="onStartWithHttpClientEvents()">Start using httpClient events</button><br>
+<button (click)="onStartWithRxResourceEvents()">Start using rxResource events</button><br>
+
+@if(trigger()){
+  RxResource: {{streamResource.value()?.Id}}
+}
 
 @for(item of data(); track item.Id){
   {{ item.Title }} -

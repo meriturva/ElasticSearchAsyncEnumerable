@@ -1,6 +1,7 @@
 import { HttpClient, HttpDownloadProgressEvent, HttpEvent, HttpEventType } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { filter, map, Observable, scan } from 'rxjs';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { filter, interval, map, mergeMap, Observable, of, scan, startWith, switchMap, tap, throwError } from 'rxjs';
 
 export type MyRecord = { Id: string, Title: string };
 
@@ -31,30 +32,27 @@ export class AppComponent {
     });
   }
 
+  trigger = signal(false);
+
+  streamResource = rxResource({
+    params: () => ({ trigger: this.trigger() }),
+    stream: ({ params }) => {
+      if (params.trigger) {
+        return this.streamWithHttpClientWithEvents();
+      } else {
+        return of();
+      }
+    }
+  });
+
+  onStartWithRxResourceEvents(){
+    this.trigger.set(true);
+  }
+
   onStartWithHttpClientEvents() {
-    this._httpClient.get("/stream", {
-      observe: 'events',
-      responseType: 'text',
-      reportProgress: true
-    }).pipe(
-      // Filter only DownloadProgress events
-      filter(event => event.type === HttpEventType.DownloadProgress),
-      // Scan the events to accumulate the downloaded records
-      scan((acc, event: HttpEvent<string>) => {
-        const partialText = (event as HttpDownloadProgressEvent).partialText ?? '';
-        const newContent = partialText.substring(acc.lastLoaded);
-        acc.lastLoaded += newContent.length;
-        const lines = newContent.split(/\r?\n/);
-        acc.records = lines.filter(line => line).map(line => JSON.parse(line));
-        return acc;
-      }, { lastLoaded: 0, records: [] as MyRecord[] }),
-      // Map the accumulated records to the output
-      map(acc => acc.records),
-      // Filter out empty records
-      filter(records => records.length > 0)
-    ).subscribe(records => {
+    this.streamWithHttpClientWithEvents().subscribe(record => {
       // Update signal with new records
-      this.data.set([...this.data(), ...records]);
+      this.data.set([...this.data(), record]);
     });
   }
 
@@ -94,6 +92,32 @@ export class AppComponent {
         })();
       });
     });
+  }
+
+  private streamWithHttpClientWithEvents(): Observable<MyRecord> {
+    return this._httpClient.get("/stream", {
+      observe: 'events',
+      responseType: 'text',
+      reportProgress: true
+    }).pipe(
+      // Filter only DownloadProgress events
+      filter(event => event.type === HttpEventType.DownloadProgress),
+      // Scan the events to accumulate the downloaded records
+      scan((acc, event: HttpEvent<string>) => {
+        const partialText = (event as HttpDownloadProgressEvent).partialText ?? '';
+        const newContent = partialText.substring(acc.lastLoaded);
+        acc.lastLoaded += newContent.length;
+        const lines = newContent.split(/\r?\n/);
+        acc.records = lines.filter(line => line).map(line => JSON.parse(line));
+        return acc;
+      }, { lastLoaded: 0, records: [] as MyRecord[] }),
+      // Map the accumulated records to the output
+      map(acc => acc.records),
+      // Filter out empty records
+      filter(records => records.length > 0),
+      // Merge the records into a single stream
+      mergeMap(records => records)
+    );
   }
 }
 
